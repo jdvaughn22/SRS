@@ -1,6 +1,91 @@
 <!DOCTYPE html>
 <html>
+     <head>
+          <link href="css/sandstone.css" rel="stylesheet">
+          <link href="css/admin.css" rel="stylesheet">
+     
+    <link href="css/sandstone.css" rel="stylesheet">
+    <script scr="mongowrap.js"></script>
+     <style>
+    .grid { margin:1em auto; border-collapse:collapse }
+    .grid td {
+        cursor:pointer;
+        width:30px; height:30px;
+        border:1px solid #ccc;
+        text-align:center;
+        font-family:sans-serif; font-size:13px
+    }
+    .grid td.clicked1 {
+        
+        background-image: url("img/empChair.png");
+        background-size: 33px 33px;
+    }
+    .grid td.clicked2{
+      background-image: url("img/occChair.png");
+      background-size: 33px 33px;
+    }
+    .grid td.clicked3{
+      background-color: none;
+    }
+    img{
+        width:33px; height:33px;
+    }
+     </style>
+     </head>
+
 <body>
+     <nav class="navbar navbar-default navbar-fixed-top">
+          <div class="container-fluid">
+               <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                         <span class="sr-only">Toggle navigation</span>
+                         <span class="icon-bar"></span>
+                         <span class="icon-bar"></span>
+                         <span class="icon-bar"></span>
+                    </button>
+               <a class="navbar-brand" href="#">SRS</a>
+               </div>
+               <div id="navbar" class="navbar-collapse collapse">
+               <ul class="nav navbar-nav navbar-right">
+               <li><a href="#menu-toggle" id="menu-toggle">Dashboard</a></li>
+               <li role="presentation" class="dropdown">
+               <a id="drop5" href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="false">
+                       Profile
+                       <span class="caret"></span>
+                       </a>
+                       <ul id="menu2" class="dropdown-menu" role="menu" aria-labelledby="drop5">
+                         <li role="presentation"><a role="menuitem" tabindex="-1" href="home.html">Logout</a></li>
+                       </ul>
+                     </li>
+            <li><a href="#">Settings</a></li>
+            <li><a href="#">Help</a></li>
+               </ul>
+               </div>
+          </div>
+     </nav>
+
+     <div id="wrapper" class="">
+      <!-- Sidebar -->
+      <div id="sidebar-wrapper">
+          <ul class="sidebar-nav">
+               <li class="sidebar-brand">
+                    <a href="#">
+                    Admin Dashboard
+               </a>
+           </li>
+           <li>
+                    <a href="#">Services</a>
+           </li>
+               <li>
+                    <a href="#">Contact</a>
+           </li>
+        </ul>
+     </div>
+
+
+
+<div id="page-content-wrapper">
+     <h1>New Survey</h1>
 <form name="myForm" method="POST">
      <div id="dynamicInputs">
           Add Questions
@@ -14,41 +99,50 @@
           </select>
           <br>
           <br>
-          <input type="button" id="answer" value="Response Type" onclick="addAllInputs('dynamicInputs', document.myForm.inputSelect.value, false);" disabled="disabled">
-          <input type="button" id="question" value="New Question" onclick="addAllInputs('dynamicInputs', 'text', true);">
-          
+          <input type="button" class="btn btn-primary btn-sm" id="answer" value="Response Type" onclick="addAllInputs('dynamicInputs', document.myForm.inputSelect.value, false);" disabled="disabled">
+          <input type="button" class="btn btn-primary btn-sm" id="question" value="New Question" onclick="addAllInputsHelper('dynamicInputs', 'text', true);"> 
+          <br/>
+          <br/>
+          <input type="button" class="btn btn-success" id="finish" value="Finish" onclick="sendToDatabase();">
           <br>
      </p>
 </form>
+</div>
+</div>
 
 <script>
 var counter = 1; // adds the number to the questions
 var limit = 3; // controls the number of questions
-function addInput(divName){
-     if (counter == limit)  {
-          alert("You have reached the limit of adding " + counter + " inputs");
-     }
-     else {
-          var newdiv = document.createElement('div');
-          newdiv.innerHTML = "<br>"+"Question " + (counter + 1) + " <br><input type='text' name='myInputs[]'>";
-          document.getElementById(divName).appendChild(newdiv);
-          counter++;
-     }
-}
+
+// Arrays that contain the survey data.
+// Will be sent to the database.
+var questionsArray = [];
+
+var answerTypesArray = [];
+var tempAnswerTypes = [];
+
+var answerChoicesArray = [];
+
 
 var firstQuest = true
 var answerBool  = false;
 var counterQuestion = 0;
 
+function addAllInputsHelper(divName, inputType, questionBool){
+      addAllInputs(divName, inputType, questionBool);
+      answerTypesArray[answerTypesArray.length] = tempAnswerTypes;
+      //console.log(answerTypesArray);
+      tempAnswerTypes = [];
+}
+
+
 function addAllInputs(divName, inputType, questionBool){
      var newdiv = document.createElement('div');
-
-
      if (questionBool == true){
           
           // Ensures that no question is added without an answer option
           if(firstQuest == true || answerBool == true){
-               newdiv.innerHTML = "<br>" + (counterQuestion + 1) + ".)" + "<br><input type='text' name='myInputs[]'>";
+               newdiv.innerHTML = "<br>" + (counterQuestion + 1) + ".)" + "<br><input id='newDiv' type='text' name='myInputs[]'>";
                counterQuestion++;
                firstQuest = false;
                answerBool = false;
@@ -63,27 +157,45 @@ function addAllInputs(divName, inputType, questionBool){
           switch(inputType) {
                case 'text':
                     newdiv.innerHTML = "<br>" + "<input type='text' name='myInputs[]'>";
+                    tempAnswerTypes[tempAnswerTypes.length] = "text";
                     break;
                case 'radio':
                     newdiv.innerHTML = "<br>" + "<input type='radio' name='myRadioButtons[]'>" + "<input text='text'>";
+                    tempAnswerTypes[tempAnswerTypes.length] = "radio";                   
                     break;
                case 'checkbox':
                     newdiv.innerHTML = "<br>" + "<input type='checkbox' name='myCheckBoxes[]'>" + "<input text='text'>";
+                    tempAnswerTypes[tempAnswerTypes.length] = "checkbox";
                     break;
                case 'textarea':
-                 newdiv.innerHTML = "<br>" + "<textarea name='myTextAreas[]'>type here...</textarea>";
+                    newdiv.innerHTML = "<br>" + "<textarea name='myTextAreas[]'>type here...</textarea>";
+                    tempAnswerTypes[tempAnswerTypes.length] = "textarea";
                     break;
                }
                answerBool = true;
+               
           }
 
      // Disables the answer button unless there has been a question
 
-     if(questionBool == true){
+    if(questionBool == true){
           answer.disabled=false;
      }
 
      document.getElementById(divName).appendChild(newdiv);
+     console.log(document.getElementById("newDiv").value);
+}
+
+function getQuestionData() {
+    //console.log(document.getElementById("question").value);
+}
+
+
+function sendToDatabase() {
+    answerTypesArray[answerTypesArray.length] = tempAnswerTypes;
+    answerTypesArray.shift();
+    //console.log(answerTypesArray);
+    getQuestionData();
 }
 
 

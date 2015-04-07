@@ -1,0 +1,200 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+	<link href="css/sandstone.css" rel="stylesheet">
+	<link href="css/admin.css" rel="stylesheet">
+  <link href="css/sandstone.css" rel="stylesheet">
+  <link href="css/configRoom.css" rel="stylesheet">
+  </head>
+
+  <body>
+	<nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">SRS</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="#menu-toggle" id="menu-toggle">Dashboard</a></li>
+			<li role="presentation" class="dropdown">
+			<a id="drop5" href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="false">
+			        Profile
+			        <span class="caret"></span>
+			        </a>
+			        <ul id="menu2" class="dropdown-menu" role="menu" aria-labelledby="drop5">
+			          <li role="presentation"><a role="menuitem" tabindex="-1" href="home.html">Logout</a></li>
+			        </ul>
+			      </li>
+            <li><a href="#">Settings</a></li>
+            <li><a href="#">Help</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+
+	<div id="wrapper" class="">
+	 <!-- Sidebar -->
+	 <div id="sidebar-wrapper">
+	 	<ul class="sidebar-nav">
+	   		<li class="sidebar-brand">
+	      		<a href="#">
+	         		Admin Dashboard
+	         	</a>
+	      </li>
+	      <li>
+	      		<a href="#">Services</a>
+	      </li>
+	      	<li>
+	      		<a href="#">Contact</a>
+	      </li>
+	   </ul>
+	</div>
+	
+	<div id="page-content-wrapper">
+	            <div class="container-fluid">
+	                <div class="row">
+	                    <div class="col-lg-12">
+	                        <h1>Array using javascript parameters</h1>
+	                        <form>
+      									Height:<br>
+      									<input type = "number" id="heightInput">
+      									<br>
+      									<br>
+      									Width:<br>
+      									<input type = "number" id="widthInput">
+    									</form>
+    									<p>Click the button to get an array of the specified size</p>
+    									<button onclick="grid()">Try it</button>
+										<a href="wp2.html"><button onclick="save()">Save</button></a>
+	                  </div>
+                    <div class="col-lg-12" id="test">
+                    </div>
+	                </div>
+	            </div>
+	        </div>
+	</div>
+
+    <!-- jQuery -->
+  <script src="lib/jquery.js"></script>
+  <!-- Bootstrap Core JavaScript -->
+  <script src="lib/bootstrap.js"></script>
+
+  <script>
+
+  function clickableGrid( rows, cols, callback ){
+      var i=0;
+      var grid = document.createElement('table');
+      grid.className = 'grid';
+      grid.id = 'table';
+
+      //creates the rows
+      for (var r=0;r<rows;++r){
+          var tr = grid.appendChild(document.createElement('tr'));
+          
+          //creates the columns
+          for (var c=0;c<cols;++c){
+              var cell = tr.appendChild(document.createElement('td'));
+              //adds numbers to the cells
+              //cell.innerHTML = ++i;
+              cell.id = ++i;
+
+              cell.addEventListener('click',(function(el,r,c,i){
+                  return function(){
+                      callback(el,r,c,i);
+                  };
+              })
+
+              (cell,r,c,i),false);
+          }
+      }
+      return grid;
+  }
+
+
+  function grid() {
+
+    var counter = 0;
+    // Grabs the number from the form in the height box
+    var height = document.getElementById("heightInput").value;
+
+    //Grabs the number from the form in the width box
+    var width = document.getElementById("widthInput").value;
+
+    var lastClicked;
+
+    var grid = clickableGrid(height,width,function(el,row,col,i){
+              console.log("You clicked on element:",el);
+              console.log("You clicked on row:",row);
+              console.log("You clicked on col:",col);
+              console.log("You clicked on item #:",i);
+              
+
+              // Uses the class name to determine if the box has been clicked
+              
+              if(el.className == ''){
+                el.className = 'clicked1';
+              }
+              else if(el.className == 'clicked1'){
+                el.className = 'clicked2';
+              }
+              else if(el.className == 'clicked2'){
+                el.className = '';
+              }
+          });
+
+    //prints the array
+      var testGrid = document.body.appendChild(grid);
+      localStorage.setItem('gridHeight', height);
+      localStorage.setItem('gridWidth', width);
+
+  }
+
+  function save(i){
+    
+    var gridArray1 = new Array();
+    var gridArray2 = new Array();
+    var table = document.getElementById('table');
+    
+    for (var r = 0, n = table.rows.length; r < n; r++) {
+            for (var c = 0, m = table.rows[r].cells.length; c < m; c++) {
+                console.log(table.rows[r].cells[c].className);
+                if(table.rows[r].cells[c].className == 'clicked1'){
+                  gridArray1.push(table.rows[r].cells[c].id);
+
+                }
+                else if(table.rows[r].cells[c].className == 'clicked2'){
+                  gridArray2.push(table.rows[r].cells[c].id);
+                }
+            }
+        } 
+      var toLocal1 = gridArray1.toString();
+      var toLocal2 = gridArray2.toString(); 
+      console.log(toLocal1);
+      console.log(toLocal2);
+      localStorage.setItem('empChairArray', toLocal1);
+      localStorage.setItem('occChairArray', toLocal2);
+  }
+
+
+  </script>
+
+  <script>
+
+	    $("#menu-toggle").click(function(e) {
+	        e.preventDefault();
+	        $("#wrapper").toggleClass("toggled");
+	    });
+  </script>
+
+  </body>
+
+
+</html>

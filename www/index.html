@@ -18,24 +18,424 @@
     under the License.
 -->
 <html>
-    <head>
-        <meta charset="utf-8" />
-        <meta name="format-detection" content="telephone=no" />
-        <meta name="msapplication-tap-highlight" content="no" />
-        <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
-        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
-        <link rel="stylesheet" type="text/css" href="css/index.css" />
-        <title>Hello World</title>
-    </head>
-    <body>
-        <div class="app">
-            <h1>Apache Cordova</h1>
-            <div id="deviceready" class="blink">
-                <p class="event listening">Connecting to Device</p>
-                <p class="event received">Device is Ready</p>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/sandstone.css" rel="stylesheet">
+    <link href="css/admin.css" rel="stylesheet">
+    <link href="css/configRoom.css" rel="stylesheet">
+</head>
+
+<body>
+
+<!-- template for home page -->
+<script id="home-template" type="text/template">
+    <div class="panel panel-default" style=" margin:0 auto;">
+        <div class="panel-heading"><a data-toggle="modal" data-target="#myModal" class="pull-right">Login</a> 
+            <h4>Dr. Scofield Surey</h4></div>
+            <div class="panel-body">
+                <div class="clearfix"></div>
+                <hr>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis pharetra varius quam sit amet vulputate.
+                Quisque mauris augue, molestie tincidunt condimentum vitae, gravida a libero. Aenean sit amet felis
+                dolor, in sagittis nisi. Sed ac orci quis tortor imperdiet venenatis. Duis elementum auctor accumsan.
+                Aliquam in felis sit amet augue.
+                <hr>
+                <a href="#takeSurvey"><button class="btn btn-primary" style=" margin:0 auto;">Start Survey</button></a>
             </div>
         </div>
-        <script type="text/javascript" src="cordova.js"></script>
-        <script type="text/javascript" src="js/index.js"></script>
-    </body>
+        
+        <!-- Modal -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Login</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-horizontal" name="myform">
+                            <div class="form-group">
+                                <div class="col-sm-10">
+                                    <input type="text" name="username" class="form-control" placeholder="Username">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-10">
+                                    <input type="password" name="pword" class="form-control" id="inputPassword3" placeholder="Password">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <input type="button" id="login-button" name="Submit" class="btn btn-primary" value="Login"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+</script> <!-- end home template -->
+
+<!-- template for admin home page -->
+<script id="admin-home-template" type="text/template">
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">SRS</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#menu-toggle" id="menu-toggle">Dashboard</a></li>
+                    <li role="presentation" class="dropdown">
+                        <a id="drop5" href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="false">
+                        Profile
+                        <span class="caret"></span></a>
+                        <ul id="menu2" class="dropdown-menu" role="menu" aria-labelledby="drop5">
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#home">Logout</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">Settings</a></li>
+                    <li><a href="#">Help</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div id="wrapper" class="">
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand"><a href="#">Admin Dashboard</a></li>
+                <li><a href="#">Services</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </div>
+        <!-- /#sidebar-wrapper -->
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <h2>Setup Test Case</h2>
+                                <p><a class="btn btn-primary" href="#" role="button">New Test Case</a></p>
+                            </div>
+                            <div class="col-lg-6">
+                                <h2>Export Active Test Data</h2>
+                                <p><a class="btn btn-primary" href="#" role="button">Export Data</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+    </div>
+    <!-- /#wrapper -->
+</script> <!-- end admin home template -->
+
+<!-- configure room template -->
+<script id="configure-room-template" type="text/template">
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">SRS</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#menu-toggle" id="menu-toggle">Dashboard</a></li>
+                    <li role="presentation" class="dropdown">
+                        <a id="drop5" href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="false">
+                        Profile
+                        <span class="caret"></span></a>
+                        <ul id="menu2" class="dropdown-menu" role="menu" aria-labelledby="drop5">
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#home">Logout</a></li>
+                        </ul> 
+                    </li>
+                    <li><a href="#">Settings</a></li>
+                    <li><a href="#">Help</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div id="wrapper" class="">
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand"><a href="#">Admin Dashboard</a></li>
+                <li><a href="#">Services</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </div>
+        <!-- #sidebar-wrapper -->
+    
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1>Array using javascript parameters</h1>
+                        <form>
+                            Height:
+                            </br>
+                            <input type = "number" id="heightInput">
+                            </br></br>
+                            Width:
+                            </br>
+                            <input type = "number" id="widthInput">
+                        </form>
+                        
+                        <p>Click the button to get an array of the specified size</p>
+                        <button id="generate-grid">Really Try It</button>
+                        <a href="#viewRoom"><button id="save-grid">Save</button></a> 
+                      </div>
+                    <div class="col-lg-12" id="test">
+                        <!-- grid goes here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+<!-- end configure room template -->
+
+<!-- configure survey template -->
+<script id="configure-survey-template" type="text/template">
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">SRS</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#menu-toggle" id="menu-toggle">Dashboard</a></li>
+                    <li role="presentation" class="dropdown">
+                        <a id="drop5" href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="false">
+                        Profile
+                        <span class="caret"></span></a>
+                        <ul id="menu2" class="dropdown-menu" role="menu" aria-labelledby="drop5">
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#home">Logout</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">Settings</a></li>
+                    <li><a href="#">Help</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div id="wrapper" class="">
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand"><a href="#">Admin Dashboard</a></li>
+                <li><a href="#">Services</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </div>
+        <!-- #sidebar-wrapper -->
+
+        <div id="page-content-wrapper">
+            <h1>New Survey</h1>
+            <form name="myForm" method="POST">
+                <div id="dynamicInputs">Add Questions</div>
+                <p>  
+                    <select name="inputSelect">
+                        <option value="text">text field</option>
+                        <option value="radio">radio button</option>
+                        <option value="checkbox">checkbox</option>
+                        <option value="textarea">textarea</option>
+                    </select>
+                    </br></br>
+                    <input type="button" id="answer" value="Response Type" disabled="disabled">
+                    <input type="button" id="question" value="New Question">
+                      
+                    </br>
+                </p>
+            </form>
+        </div>
+    </div>
+</script>
+<!-- end template for configuring survey -->
+
+<!-- template for viewing room that already exists -->
+<script id="view-room-template" type="text/template">
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">SRS</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#menu-toggle" id="menu-toggle">Dashboard</a></li>
+                    <li role="presentation" class="dropdown">
+                        <a id="drop5" href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="false">
+                        Profile
+                        <span class="caret"></span></a>
+                        <ul id="menu2" class="dropdown-menu" role="menu" aria-labelledby="drop5">
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#home">Logout</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">Settings</a></li>
+                    <li><a href="#">Help</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div id="wrapper" class="">
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand"><a href="#">Admin Dashboard</a></li>
+                <li><a href="#">Services</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </div>
+        <!-- #sidebar-wrapper -->
+  
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1>Preview</h1>
+                    </div>
+                <div id="test">
+                    <!-- grid goes here -->
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+<!-- end view room template -->
+
+
+<!-- the next two templates are for experiment subject actions, not admin -->
+
+<!-- template for user taking survey -->
+<script id="take-survey-template" type="text/template">
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">SRS</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#">Help</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <center>
+        <div id="page-content-wrapper">
+            <h1>A Few Questions</h1>
+
+            <form id="survey-form">
+                <div id="survey">
+                </div>
+
+                <a href="#selectChair"><input type="submit" id="submit-survey" value="Submit"></a>
+            </form>
+
+            </br>
+            
+
+        </div>
+    </center>
+
+</script>
+<!-- end take survey template -->
+
+<!-- template for user selecting a chair in room -->
+<script id="select-chair-template" type="text/template">
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">SRS</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#">Help</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <center>
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <h1>Where Would You Sit?</h1>
+                </div>
+                <div id="test-room">
+                    <!-- grid goes here -->
+                </div>
+            </div>
+        </div>
+    </center>
+</script>
+<!-- end select chair template -->
+
+<!-- lib js files -->
+<script src="lib/jquery.js"></script>
+<script src="lib/bootstrap.js"></script>
+<script src="lib/handlebars.js"></script>
+<script src="lib/router.js"></script>
+<script src="lib/mongowrap.js"></script>
+
+<!-- js files for views -->
+<script src="js/HomeView.js"></script>
+<script src="js/AdminHomeView.js"></script>
+<script src="js/ConfigureRoomLayoutView.js"></script>
+<script src="js/ConfigureSurveyView.js"></script>
+<script src="js/ViewRoomView.js"></script>
+<script src="js/TakeSurveyView.js"></script>
+<script src="js/SelectChairView.js"></script>
+
+<!-- main app js -->
+<script src="js/app.js"></script>
+
+</body>
 </html>
